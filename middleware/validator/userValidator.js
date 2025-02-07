@@ -60,6 +60,8 @@ module.exports.updata = validate([
         }
     }).bail(),
     body('phone')
+    .if((value, { req }) => req.body.phone !== undefined) // 检查 phone 是否存在于请求体中
+    .isLength({ min: 11 }).withMessage('手机号不能小于11位').bail()
     .custom(async val => {
         // console.log('phone:',val);
         if(val) { 
