@@ -21,7 +21,7 @@ module.exports.verifyToken = async (req,res,next) => {
        next()
        //失败
     } catch (error) {
-        res.status(402).json({error:"无效的token"})
+        await res.status(402).json({error:"无效的token"})
     }
     
 }

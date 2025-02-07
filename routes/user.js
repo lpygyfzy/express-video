@@ -14,7 +14,12 @@ router
     .post('/logins',
         validator.login,
         userController.login)
-    .get('/lists', verifyToken, userController.list)
+    //修改
+    .put('/',
+        verifyToken,
+        validator.updata,
+        userController.updata)    
+    .get('/lists', verifyToken,userController.list)
     .delete('/', userController.delete)
 
 module.exports = router;

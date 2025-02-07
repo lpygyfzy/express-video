@@ -37,3 +37,40 @@ module.exports.login = validate([
     body('password').notEmpty().withMessage('密码不能为空').bail()
     .isLength({ min: 6 }).withMessage('密码不能小于6'),
 ])
+
+//用户修改
+module.exports.updata = validate([ 
+    body('username')
+    .if((value, { req }) => req.body.username !== undefined) // 检查 username 是否存在于请求体中
+    .isLength({ min: 3 }).withMessage('用户名不能小于3').bail()
+    .custom(async val => {
+        if(val) { 
+            const userValidate = await User.findOne({username: val})
+            if(userValidate) { 
+                return Promise.reject('用户名已存在')
+            }
+        }
+        
+    }).bail(),
+    body('email')
+    .custom(async val => {
+        const emailValidate = await User.findOne({email: val})
+        if(emailValidate) { 
+            return Promise.reject('邮箱已经注册')
+        }
+    }).bail(),
+    body('phone')
+    .custom(async val => {
+        // console.log('phone:',val);
+        if(val) { 
+            const phoneValidate = await User.findOne({phone: val})
+            //console.log('phone:',phoneValidate);
+            if(phoneValidate) { 
+                return Promise.reject('手机号已存在')
+            }
+        }
+        
+    }).bail(),
+    // body('password').notEmpty().withMessage('密码不能为空').bail()
+    // .isLength({ min: 6 }).withMessage('密码不能小于6'),
+])
